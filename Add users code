@@ -1,0 +1,59 @@
+package Calculator;
+
+import javax.swing.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+
+public class AppGUI {
+
+    public static void main(String[] args) {
+
+    }
+
+    static Connection connect() {
+        try {
+
+           return DriverManager.getConnection("jdbc:mysql://localhost:3306/smdb","root", "Welkom#123");
+
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println("Oops... something went wrong!!");
+        }
+    return null;
+    }
+
+    public void savaToDataBase() {
+        Connection connect = connect();
+        try {
+            String query = "insert into gebruiker values(?,?,?,?,?)";
+        }
+        catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+    }
+
+
+
+    private JPanel mainPanel;
+    private JLabel Logo;
+    private JButton addUser_Button;
+    private JButton cancelButton;
+    private JButton accountSettings;
+    private JTextField deviceTagTextField;
+    private JTextField zipCodeTextField;
+    private JTextField eMailTextField;
+    private JTextField BSNNumberTextField;
+    private JTextField firstNameTextField;
+    private JTextField lastNameTextField;
+    private JTextField caseNumberTextField;
+    private JTextField streetHouseNumberTextField;
+    private JCheckBox sendEmailConfirmationCheckBox;
+    private JTextArea newUserDetailsTextArea;
+    private JButton selectImage_button;
+    private JButton imageButton;
+    private JButton ___Button;
+}
