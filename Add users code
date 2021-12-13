@@ -1,34 +1,80 @@
 package Calculator;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 
-public class AppGUI {
+public class AppGUI extends JFrame {
+    private JPanel mainPanel;
+    private JLabel Logo;
+    private JButton addUser_Button;
+    private JButton cancelButton;
+    private JButton accountSettings;
+    private JTextField deviceTagTextField;
+    private JTextField postcodeTextField;
+    private JTextField eMailTextField;
+    private JTextField BSNNummerTextField;
+    private JTextField voornaamTextField;
+    private JTextField achternaamTextField;
+    private JTextField caseNumberTextField;
+    private JTextField straatnaamHuisnrTextField;
+    private JCheckBox sendEmailConfirmationCheckBox;
+    private JTextArea newUserDetailsTextArea;
+    private JButton selectImage_button;
+    private JButton imageButton;
+    private JButton ___Button;
+    private JLabel bevestigingMassage;
 
+    public AppGUI() {
+        // Instellen GUI uiterlijk
+        setContentPane(mainPanel);
+        setTitle("SafeMe app");
+        setSize(780, 400);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+
+        // functioneel maken knop Add User
+        addUser_Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addUser_Button.setText("Gebruiker is toegevoegd");
+
+            }
+        });
+        // functioneel maken knopje Cancel
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+            }
+        });
+    }
     public static void main(String[] args) {
-    connect();
-    savaToDataBase();
+
+        connect();
+        savaToDataBase();
+        AppGUI myGUI = new AppGUI();
     }
 
-    static Connection connect() {
-        try {
+    static void  connect() {
+            try {
 
-           return DriverManager.getConnection("jdbc:mysql://localhost:3306/smdb","root", "Welkom#123");
-
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.println("Oops... something went wrong!!");
-        }
-    return null;
+                Connection connect =  DriverManager.getConnection("jdbc:mysql://localhost:3306/smdb","root", "Welkom#123");
+                System.out.println("Connection done!");
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println("Oops!!");
+            }
     }
 
     public static void savaToDataBase() {
-        Connection connect = connect();
+
         try {
             String query = "insert into gebruiker values(?,?,?,?,?)";
         }
@@ -37,24 +83,4 @@ public class AppGUI {
         }
     }
 
-
-
-    private JPanel mainPanel;
-    private JLabel Logo;
-    private JButton addUser_Button;
-    private JButton cancelButton;
-    private JButton accountSettings;
-    private JTextField deviceTagTextField;
-    private JTextField zipCodeTextField;
-    private JTextField eMailTextField;
-    private JTextField BSNNumberTextField;
-    private JTextField firstNameTextField;
-    private JTextField lastNameTextField;
-    private JTextField caseNumberTextField;
-    private JTextField streetHouseNumberTextField;
-    private JCheckBox sendEmailConfirmationCheckBox;
-    private JTextArea newUserDetailsTextArea;
-    private JButton selectImage_button;
-    private JButton imageButton;
-    private JButton ___Button;
 }
