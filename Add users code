@@ -10,7 +10,8 @@ import java.sql.Statement;
 public class AppGUI {
 
     public static void main(String[] args) {
-
+    connect();
+    savaToDataBase();
     }
 
     static Connection connect() {
@@ -26,7 +27,7 @@ public class AppGUI {
     return null;
     }
 
-    public void savaToDataBase() {
+    public static void savaToDataBase() {
         Connection connect = connect();
         try {
             String query = "insert into gebruiker values(?,?,?,?,?)";
