@@ -5,8 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 
 public class AppGUI extends JFrame {
@@ -21,14 +20,16 @@ public class AppGUI extends JFrame {
     private JTextField BSNNummerTextField;
     private JTextField voornaamTextField;
     private JTextField achternaamTextField;
-    private JTextField caseNumberTextField;
-    private JTextField straatnaamHuisnrTextField;
+    private JTextField straatnaamTextField;
     private JCheckBox sendEmailConfirmationCheckBox;
-    private JTextArea newUserDetailsTextArea;
+    private JTextArea nieuweGebruikerTextArea;
     private JButton selectImage_button;
-    private JButton imageButton;
+    private JButton pasfotoButton;
     private JButton ___Button;
     private JLabel bevestigingMassage;
+    private JTextField leeftijdTextField;
+    private JTextField huisnummerTextField;
+    private JTextField telefoonnummerTextField;
 
     public AppGUI() {
         // Instellen GUI uiterlijk
@@ -38,30 +39,61 @@ public class AppGUI extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
-        // functioneel maken knop Add User
+
+        // functioneel maken knop 'Opslaan'
         addUser_Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addUser_Button.setText("Gebruiker is toegevoegd");
+                try {
+                    Connection connect =  DriverManager.getConnection("jdbc:mysql://localhost:3306/smdb","root", "Welkom#123");
+                    String sql = "insert into gebruiker (BSN, voornaam, achternaam, leeftijd, postcode, straatnaam, huisnummer, telefoonnummer, e_mail, tag) values (?, ?, ?, ?, ?, ?, ? ,?, ?, ?)";
+                    PreparedStatement pstmt = connect.prepareStatement(sql);
+                    pstmt.setInt(1, Integer.parseInt(BSNNummerTextField.getText()));
+                    pstmt.setString(2, voornaamTextField.getText());
+                    pstmt.setString(3, achternaamTextField.getText());
+                    pstmt.setInt(4, Integer.parseInt(leeftijdTextField.getText()));
+                    pstmt.setInt(5, Integer.parseInt(postcodeTextField.getText()));
+                    pstmt.setString(6, straatnaamTextField.getText());
+                    pstmt.setInt(7, Integer.parseInt(huisnummerTextField.getText()));
+                    pstmt.setInt(8, Integer.parseInt(telefoonnummerTextField.getText()));
+                    pstmt.setString(9, eMailTextField.getText());
+                    // pstmt.setString(10, selectImage_button.getText());
+                    pstmt.setString(10, deviceTagTextField.getText());
+
+                    pstmt.executeUpdate();
+                    connect.close();
+
+                    JOptionPane.showMessageDialog(null, "Gebruiker is toegevoegd");
+                    // bevestigingMassage.setText("Gebruiker is toegevoegd");
+                }
+                catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Gegevens kloppen niet helemaal");
+                    ex.printStackTrace();
+                   // bevestigingMassage.setText("Gegevens kloppen niet helemaal");
+                }
+
 
             }
         });
-        // functioneel maken knopje Cancel
+        // functioneel maken knopje 'Annuleren'
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 setVisible(false);
+
+
             }
         });
     }
     public static void main(String[] args) {
 
-        connect();
-        savaToDataBase();
-        AppGUI myGUI = new AppGUI();
+        connect2dataBase(); // connectie maken met mysql
+        // savaToDataBase(); // spreekt voor zich
+        AppGUI myGUI = new AppGUI(); // aanroepen GUI scherm
     }
 
-    static void  connect() {
+    static void  connect2dataBase() {
             try {
 
                 Connection connect =  DriverManager.getConnection("jdbc:mysql://localhost:3306/smdb","root", "Welkom#123");
