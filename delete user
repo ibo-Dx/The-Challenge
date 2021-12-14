@@ -1,0 +1,58 @@
+package Calculator;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class verwijderenGebruikers extends JFrame {
+
+
+    private JTextField teVerwijderenBSNtextField;
+    private JButton verwijderButton;
+    private JPanel verwijderPanel;
+
+    public verwijderenGebruikers() {
+        // Instellen GUI uiterlijk
+
+        setContentPane(verwijderPanel);
+        setTitle("SafeMe app");
+        setSize(450, 260);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+
+
+
+        verwijderButton.addActionListener(new ActionListener() { // functioneel maken knop 'Verwijderen':
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    Connection connect =  DriverManager.getConnection("jdbc:mysql://localhost:3306/smdb","root", "Welkom#123"); // connectie maken met mysql
+
+                    String sql = "delete from gebruiker where BSN = ?"; //query
+                    PreparedStatement pstmt = connect.prepareStatement(sql); //query voorbereiden
+                    pstmt.setString(1,teVerwijderenBSNtextField.getText()); // inlezen waarde vanuit gui knop
+                    pstmt.executeUpdate();  //query uitvoeren
+
+                    JOptionPane.showMessageDialog(null, "Gebruiker is verwijderd!"); // bevestiging pop-up
+
+                    connect.close();
+
+                }
+                catch (Exception ex1) {
+                    JOptionPane.showMessageDialog(null, "oops.. Verwijderen is niet gelukt"); // error pop-up
+                    ex1.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+
+        verwijderenGebruikers myGUI2 = new verwijderenGebruikers(); // aanroepen GUI scherm
+    }
+}
